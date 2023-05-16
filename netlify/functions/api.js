@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const serverless = require('serverless-http');
 const app = express();
@@ -7,7 +9,7 @@ let records = [];
 
 //Get all students
 router.get('/', (req, res) => {
-  res.send('App is running..');
+  res.send(`App is running ON PORT: ${process.env.PORT}`);
 });
 
 //Create new record
