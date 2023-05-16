@@ -21,7 +21,7 @@ const openai = new OpenAIApi(configuration);
 
 //Create new record
 router.post('/preggo', async (req, res) => {
-  const { items } = req.body;
+  const { item } = req.body;
 
   const completion = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
@@ -29,7 +29,7 @@ router.post('/preggo', async (req, res) => {
     messages: [
       {
         role: 'user',
-        content: `Can pregnant women eat this: ${items}`,
+        content: `Can pregnant women eat ${item}?`,
       },
     ],
   });
