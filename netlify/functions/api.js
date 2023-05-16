@@ -20,21 +20,16 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 //Create new record
-router.post('/generate-cover-letter', async (req, res) => {
-  console.log('POST /generate-cover-letter');
-
-  const { companyName, yourName, position, jobRequirements, yourExperience } =
-    req.body;
+router.post('/preggo', async (req, res) => {
+  const { items } = req.body;
 
   const completion = await openai.createChatCompletion({
-    // model: 'curie',
     model: 'gpt-3.5-turbo',
     // model: 'gpt-4',
     messages: [
       {
         role: 'user',
-        content: `Hi, please make me a cover letter for the position of ${position} at ${companyName}. Here is the job requirements: ${jobRequirements}. Here is my relevant experience: ${yourExperience}. And my name is ${yourName}`,
-        // content: 'Hi',
+        content: `Can pregnant women eat this: ${items}`,
       },
     ],
   });
