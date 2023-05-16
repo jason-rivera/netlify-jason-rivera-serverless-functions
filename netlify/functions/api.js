@@ -32,7 +32,8 @@ router.post('/generate-cover-letter', async (req, res) => {
     messages: [
       {
         role: 'user',
-        content: `Hi, please make me a cover letter for the position of ${position} at ${companyName}. Here is the job requirements: ${jobRequirements}. Here is my relevant experience: ${yourExperience}. And my name is ${yourName}`,
+        // content: `Hi, please make me a cover letter for the position of ${position} at ${companyName}. Here is the job requirements: ${jobRequirements}. Here is my relevant experience: ${yourExperience}. And my name is ${yourName}`,
+        content: 'Hi',
       },
     ],
   });
