@@ -10,8 +10,6 @@ app.get('/api/hello', (req, res) => {
 
 module.exports = app;
 
-const app = require('./server');
-
 exports.handler = async (event, context) => {
   return await new Promise((resolve, reject) => {
     // Emulate Express request and response objects
