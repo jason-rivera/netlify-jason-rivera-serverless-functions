@@ -1,22 +1,42 @@
-'use strict';
 const express = require('express');
-const path = require('path');
-const serverless = require('serverless-http');
 const app = express();
-const bodyParser = require('body-parser');
 
-const router = express.Router();
-router.get('/', (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.write('<h1>Hello from Express.js!</h1>');
-  res.end();
+// Define your routes and middleware here
+
+// Example route
+app.get('/api/hello', (req, res) => {
+  res.send('Hello from Express on Netlify Functions!');
 });
-router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
-router.post('/', (req, res) => res.json({ postBody: req.body }));
-
-app.use(bodyParser.json());
-app.use('/.netlify/functions/server', router); // path must route to lambda
-app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
 
 module.exports = app;
-module.exports.handler = serverless(app);
+
+const app = require('./server');
+
+exports.handler = async (event, context) => {
+  return await new Promise((resolve, reject) => {
+    // Emulate Express request and response objects
+    const req = {
+      ...event,
+      url: event.path,
+      path: event.path,
+      httpMethod: event.httpMethod,
+      headers: event.headers,
+      queryStringParameters: event.queryStringParameters,
+      body: event.body ? JSON.parse(event.body) : {},
+    };
+    const res = {
+      statusCode: 200,
+      setHeader: () => {},
+      end: (body) => {
+        resolve({
+          statusCode: res.statusCode,
+          body: body,
+          headers: res.headers,
+        });
+      },
+    };
+
+    // Pass the request and response to the Express app
+    app(req, res);
+  });
+};
