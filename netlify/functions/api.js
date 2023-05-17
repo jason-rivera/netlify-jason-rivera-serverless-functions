@@ -21,22 +21,29 @@ const openai = new OpenAIApi(configuration);
 
 //Create new record
 router.post('/preggo', async (req, res) => {
-  const { item } = req.body;
+  try {
+    const { item } = req.body;
 
-  const completion = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    // model: 'gpt-4',
-    messages: [
-      {
-        role: 'user',
-        content: `Can pregnant women eat ${item}?`,
-      },
-    ],
-  });
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      // model: 'gpt-4',
+      messages: [
+        {
+          role: 'user',
+          content: `Can pregnant women eat ${item}?`,
+        },
+      ],
+    });
 
-  res.json({
-    completion: completion.data.choices[0].message,
-  });
+    res.json({
+      completion: completion.data.choices[0].message,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      error: e,
+    });
+  }
 });
 
 let records = [];
@@ -82,5 +89,5 @@ router.get('/demo', (req, res) => {
   ]);
 });
 
-app.use('/.netlify/functions/api-background', router);
-module.exports.handler = async () => serverless(app);
+app.use('/.netlify/functions/api', router);
+module.exports.handler = serverless(app);
