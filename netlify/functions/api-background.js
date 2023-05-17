@@ -83,4 +83,4 @@ router.get('/demo', (req, res) => {
 });
 
 app.use('/.netlify/functions/api-background', router);
-module.exports.handler = serverless(app);
+module.exports.handler = async () => serverless(app);
