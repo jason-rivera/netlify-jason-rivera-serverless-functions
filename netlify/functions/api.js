@@ -21,55 +21,22 @@ const openai = new OpenAIApi(configuration);
 
 //Create new record
 router.post('/preggo', async (req, res) => {
-  try {
-    const { item } = req.body;
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      // model: 'gpt-4',
-      messages: [
-        {
-          role: 'user',
-          content: `Can pregnant women eat ${item}?`,
-        },
-      ],
-    });
+  const { item } = req.body;
 
-    res.json({
-      completion: completion.data.choices[0].message,
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      error: e.message,
-    });
-  }
-});
+  const completion = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    // model: 'gpt-4',
+    messages: [
+      {
+        role: 'user',
+        content: `Can pregnant women eat ${item}?`,
+      },
+    ],
+  });
 
-app.post('/generate-cover-letter', async (req, res) => {
-  try {
-    const { companyName, yourName, position, jobRequirements, yourExperience } =
-      req.body;
-
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      // model: 'gpt-4',
-      messages: [
-        {
-          role: 'user',
-          content: `Hi, please make me a cover letter for the position of ${position} at ${companyName}. Here is the job requirements: ${jobRequirements}. Here is my relevant experience: ${yourExperience}. And my name is ${yourName}`,
-        },
-      ],
-    });
-
-    res.json({
-      completion: completion.data.choices[0].message,
-    });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({
-      error: e.message,
-    });
-  }
+  res.json({
+    completion: completion.data.choices[0].message,
+  });
 });
 
 let records = [];
@@ -115,5 +82,5 @@ router.get('/demo', (req, res) => {
   ]);
 });
 
-app.use('/.netlify/functions/api-background', router);
+app.use('/.netlify/functions/api', router);
 module.exports.handler = serverless(app);
